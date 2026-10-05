@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>꿀템박스 공식 링크</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; }
+    body { background-color: #f4f5f7; display: flex; justify-content: center; min-height: 100vh; padding: 30px 16px; }
+    .container { width: 100%; max-width: 440px; text-align: center; }
+    .profile-box { margin-bottom: 24px; }
+    .profile-icon { width: 76px; height: 76px; border-radius: 50%; background: #ffcc00; display: inline-flex; align-items: center; justify-content: center; font-size: 34px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 12px; }
+    h1 { font-size: 20px; font-weight: 800; color: #111; margin-bottom: 6px; }
+    p.sub { font-size: 13px; color: #666; line-height: 1.4; }
+    .link-list { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+    .btn { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; background: #ffffff; border-radius: 14px; text-decoration: none; color: #222; font-weight: 700; font-size: 15px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); border: 1px solid #e5e8eb; transition: transform 0.1s ease; }
+    .btn:active { transform: scale(0.98); background: #fafafa; }
+    .badge { background: #ff3b30; color: #fff; font-size: 12px; padding: 3px 8px; border-radius: 8px; margin-right: 8px; font-weight: 800; }
+    .arrow { color: #007aff; font-size: 13px; font-weight: 700; }
+    .footer { font-size: 11px; color: #999; margin-top: 36px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="profile-box">
+      <div class="profile-icon">📦</div>
+      <h1>꿀템박스 추천 꿀템 모음</h1>
+      <p class="sub">영상 속 꿀템 최저가 모음전<br>※ 재고 소진 시 특가가 마감될 수 있습니다.</p>
+    </div>
+
+    <!-- 파이썬이 관리하는 items.json 데이터를 불러와 채워넣는 영역 -->
+    <div class="link-list" id="links"></div>
+
+    <p class="footer">
+      본 페이지는 쿠팡 파트너스 활동의 일환으로,<br>이에 따른 일정액의 수수료를 제공받을 수 있습니다.
+    </p>
+  </div>
+
+  <script>
+    // 브라우저 캐시 방지를 위해 현재 시간 파라미터 붙여 실시간 최신 목록 로드
+    fetch('./items.json?t=' + Date.now())
+      .then(res => res.json())
+      .then(items => {
+        const container = document.getElementById('links');
+        container.innerHTML = items.map(item => `
+          <a class="btn" href="${item.url}" target="_blank" rel="noopener noreferrer">
+            <div>
+              <span class="badge">${item.id}번</span>
+              <span>${item.title}</span>
+            </div>
+            <span class="arrow">보러가기 ➔</span>
+          </a>
+        `).join('');
+      })
+      .catch(err => {
+        document.getElementById('links').innerHTML = '<p style="color:#888; font-size:13px;">상품을 준비 중입니다.</p>';
+      });
+  </script>
+</body>
+</html>
